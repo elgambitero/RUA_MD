@@ -1,2 +1,2 @@
-XGM intro_mus "Intro.vgm"
-XGM always_mus "Always.vgm"
+XGM intro_mus "music/Intro.vgm"
+XGM always_mus "music/Always.vgm"

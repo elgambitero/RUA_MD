@@ -1,0 +1,1 @@
+IMAGE sgdk_logo "intro_gfx/sgdk_logo.png" BEST
