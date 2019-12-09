@@ -12,7 +12,7 @@ void introPlay(u16* palette, u16 ind){
             //entry
             if(introCount == (introFrames[MADE_WITH_SGDK] - FADEFRAMES)){
                 ind = TILE_USERINDEX;
-                VDP_drawImageEx(PLAN_B, &sgdk_logo, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, ind), 5, 7, FALSE, TRUE);
+                VDP_drawImageEx(PLAN_A, &sgdk_logo, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, ind), 5, 7, FALSE, TRUE);
                 
                 // prepare palettes
                 memcpy(palette, sgdk_logo.palette->data, 16 * 2);
@@ -25,15 +25,14 @@ void introPlay(u16* palette, u16 ind){
             if(introCount)
             {
                 introCount--;
+                if(introCount == FADEFRAMES){
+                    VDP_fadeOut(0, 15, FADEFRAMES, FALSE);
+                }
                 return;
             }
             //exit
             else
-            {/*
-                memcpy(palette, sgdk_logo.palette->data, 16 * 2);
-                VDP_setPalette(PAL0, palette);
-                VDP_fadeOutAll(FADEFRAMES, TRUE);*/
-                VDP_clearPlan(PLAN_B, TRUE);
+            {
                 introStates = MUSIC_WITH_DEFLE;
                 introCount = introFrames[introStates];
             }         

@@ -37,7 +37,7 @@ int main()
             break;
             case MAIN_MENU:
                 VDP_setPaletteColor(15, 0xFFF);
-                VDP_drawText("Main Menu", 10, 13);
+                VDP_drawText("Main Menu", 16, 13);
             break;
             case READY:
 
