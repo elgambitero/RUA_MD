@@ -12,18 +12,14 @@ enum MainStates{INTRO,
 enum MainStates mainStates;
 
 enum IntroStates{
-    MADE_WITH_SGDK,
+    MADE_WITH_SGDK = 0,
     MUSIC_WITH_DEFLE,
     BASED_ON_RUA,
     FRAME
     };
 
-enum introStates introStates;
+enum IntroStates introStates;
 
-#ifdef NTSC
-    static u16 introFrames[] = {120, 120, 120, 1};
-#elif
-    static u16 introFrames[] = {100, 100, 100, 1};
-#endif
+
 
 #endif
