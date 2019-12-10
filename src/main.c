@@ -15,7 +15,37 @@
 u16 palette[64];
 u16 ind;
 
+void myJoyHandler( u16 joy, u16 changed, u16 state)
+{
+    if(joy == JOY_1){
+        switch(mainStates){
+            case INTRO:
+                if(state){
+                    introCount = 1;
+                }
+            break;
+            case MAIN_MENU:
+                
+            break;
+            case READY:
+
+            break;
+            case TRY_AGAIN:
+
+            break;
+            case GAMEPLAY:
+
+            break;
+            case GAME_OVER:
+
+            break;
+        }
+    }
+}
+
 void game_init(){
+    JOY_init();
+    JOY_setEventHandler( &myJoyHandler );
     mainStates = INTRO;
     introStates = MADE_WITH_SGDK;
     introCount = (introFrames[MADE_WITH_SGDK]);
