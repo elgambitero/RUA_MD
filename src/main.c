@@ -18,7 +18,7 @@ u16 ind;
 void game_init(){
     mainStates = INTRO;
     introStates = MADE_WITH_SGDK;
-    introCount = (introFrames[MADE_WITH_SGDK] - FADEFRAMES);
+    introCount = (introFrames[MADE_WITH_SGDK]);
     // set all palette to black
     VDP_setPaletteColors(0, (u16*) palette_black, 64);
 }
