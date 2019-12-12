@@ -51,9 +51,11 @@ void game_init(){
 
     JOY_init();
     JOY_setEventHandler( &myJoyHandler );
+    VDP_setScreenWidth320();
     mainState = INTRO;
     menuState = MENUENTRY;
     readyState = READYENTRY;
+    gameState = GAMEINIT;
     introState = MADE_WITH_SGDK;
     introCount = (introFrames[MADE_WITH_SGDK]);
     // set all palette to black
@@ -84,7 +86,7 @@ int main()
 
             break;
             case GAMEPLAY:
-                gameplayLoop();
+                gameplayLoop(ind);
             break;
             case GAME_OVER:
 

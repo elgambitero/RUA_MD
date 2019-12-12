@@ -42,7 +42,7 @@ void readyLoop(u16 * palette){
         break;
         case READYEXIT:
             VDP_clearPlan(PLAN_A, TRUE);
-            mainState = MAIN_MENU;
+            mainState = GAMEPLAY;
             readyState = READYENTRY;
         break;
     }

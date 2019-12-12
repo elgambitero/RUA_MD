@@ -84,6 +84,7 @@ void introPlay(u16* palette, u16 ind){
             if(introCount == (introFrames[MADE_WITH_SGDK])){
                 VDP_setPaletteColor(15, 0x000);
                 VDP_drawText("FRAME", 16, 13);
+                VDP_setPaletteColor(15, 0xFFF);
                  //Fade in PAL1 plus the text color
                 VDP_fadeIn(0, 31, palette, FADEFRAMES, TRUE);
 
