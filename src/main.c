@@ -19,7 +19,7 @@
 u16 palette[64];
 u16 ind;
 
-void myJoyHandler( u16 joy, u16 changed, u16 state)
+void myJoyHandler(u16 joy, u16 changed, u16 state)
 {
     if(joy == JOY_1){
         switch(mainStates){
