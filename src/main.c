@@ -22,7 +22,7 @@ u16 ind;
 void myJoyHandler(u16 joy, u16 changed, u16 state)
 {
     if(joy == JOY_1){
-        switch(mainStates){
+        switch(mainState){
             case INTRO:
                 introControls(joy, changed, state);
             break;
@@ -46,13 +46,19 @@ void myJoyHandler(u16 joy, u16 changed, u16 state)
 }
 
 void game_init(){
+
+    SYS_disableInts();
+
     JOY_init();
     JOY_setEventHandler( &myJoyHandler );
-    mainStates = INTRO;
-    introStates = MADE_WITH_SGDK;
+    mainState = INTRO;
+    menuState = ENTRY;
+    introState = MADE_WITH_SGDK;
     introCount = (introFrames[MADE_WITH_SGDK]);
     // set all palette to black
     VDP_setPaletteColors(0, (u16*) palette_black, 64);
+
+    SYS_enableInts();
 }
 
 int main()
@@ -63,7 +69,7 @@ int main()
 
     while(1)
 	{
-        switch(mainStates){
+        switch(mainState){
             case INTRO:
                 introPlay(palette, ind);
             break;

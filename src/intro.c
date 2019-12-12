@@ -1,11 +1,12 @@
 #include <genesis.h>
+
 #include "intro.h"
-#include "states.h"
+
 #include "intro_gfx.h"
 
 
 void introPlay(u16* palette, u16 ind){
-    switch(introStates)
+    switch(introState)
     {
         case MADE_WITH_SGDK:
             //entry
@@ -33,8 +34,8 @@ void introPlay(u16* palette, u16 ind){
             else
             {
                 VDP_clearPlan(PLAN_A, TRUE);
-                introStates = MUSIC_WITH_DEFLE;
-                introCount = introFrames[introStates];
+                introState = MUSIC_WITH_DEFLE;
+                introCount = introFrames[introState];
             }         
         break;
         case MUSIC_WITH_DEFLE:
@@ -56,8 +57,8 @@ void introPlay(u16* palette, u16 ind){
                 VDP_fadeOut(15, 15, 30, FALSE);
                 // clear text
                 VDP_clearPlan(PLAN_A, TRUE);
-                introStates = BASED_ON_RUA;
-                introCount = introFrames[introStates];
+                introState = BASED_ON_RUA;
+                introCount = introFrames[introState];
             } 
         break;
         case BASED_ON_RUA:
@@ -75,8 +76,8 @@ void introPlay(u16* palette, u16 ind){
             }
             else{
                 VDP_clearPlan(PLAN_A, TRUE);
-                introStates = FRAME;
-                introCount = introFrames[introStates];
+                introState = FRAME;
+                introCount = introFrames[introState];
             }   
         break;
         case FRAME:
@@ -94,7 +95,7 @@ void introPlay(u16* palette, u16 ind){
             }
             else{
                 VDP_clearPlan(PLAN_A, TRUE);
-                mainStates = MAIN_MENU;
+                mainState = MAIN_MENU;
             }   
         break;
     }

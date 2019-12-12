@@ -3,11 +3,19 @@
 
 #include "states.h"
 
+enum MenuStates{
+    ENTRY,
+    MENU,
+    EXIT,
+};
+
+enum MenuStates menuState;
+
 void mainMenu();
 
 static inline void menuControls(u16 joy, u16 changed, u16 state){
     if(state){
-        mainStates = MAIN_MENU;
+        mainState = MAIN_MENU;
     }
 }
 

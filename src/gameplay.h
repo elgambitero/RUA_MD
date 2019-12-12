@@ -9,7 +9,7 @@ void gameplayLoop();
 
 static inline void gameControls(u16 joy, u16 changed, u16 state){
     if(state){
-        mainStates = MAIN_MENU;
+        mainState = MAIN_MENU;
     }
 }
 

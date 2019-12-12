@@ -3,4 +3,14 @@
 
 #include "states.h"
 
+enum ReadyStates{
+    ENTRY,
+    READY,
+    EXIT,
+};
+
+enum ReadyStates readyState;
+
+void readyLoop();
+
 #endif

@@ -9,7 +9,7 @@ enum MainStates{INTRO,
     GAME_OVER
     };
 
-enum MainStates mainStates;
+enum MainStates mainState;
 
 
 #endif

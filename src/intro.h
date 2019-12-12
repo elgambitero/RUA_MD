@@ -1,6 +1,8 @@
 #ifndef INTRO_H
 #define INTRO_H
 
+#include "states.h"
+
 #ifdef NTSC
     #define FADEFRAMES 20
 #else
@@ -14,7 +16,7 @@ enum IntroStates{
     FRAME
     };
 
-enum IntroStates introStates;
+enum IntroStates introState;
 
 u16 introCount;
 
