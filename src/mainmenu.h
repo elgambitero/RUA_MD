@@ -15,7 +15,7 @@ void mainMenu();
 
 static inline void menuControls(u16 joy, u16 changed, u16 state){
     if(state){
-        mainState = READY;
+        menuState = MENUEXIT;
     }
 }
 

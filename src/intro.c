@@ -83,7 +83,7 @@ void introPlay(u16* palette, u16 ind){
         case FRAME:
             if(introCount == (introFrames[MADE_WITH_SGDK])){
                 VDP_setPaletteColor(15, 0x000);
-                VDP_drawText("Main Menu", 16, 13);
+                VDP_drawText("FRAME", 16, 13);
                  //Fade in PAL1 plus the text color
                 VDP_fadeIn(0, 31, palette, FADEFRAMES, TRUE);
 
@@ -97,6 +97,7 @@ void introPlay(u16* palette, u16 ind){
                 VDP_clearPlan(PLAN_A, TRUE);
                 VDP_interruptFade();
                 mainState = MAIN_MENU;
+                introState = MADE_WITH_SGDK;
             }   
         break;
     }
