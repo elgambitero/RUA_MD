@@ -7,6 +7,7 @@
 #define Y 1
 
 s16 scroll[2];
+s16 speed[2];
 
 enum GameStates{
     GAMEINIT,
@@ -22,16 +23,16 @@ void gameplayLoop(u16 ind);
 static inline void gameControls(u16 joy, u16 changed, u16 state){
     if(joy == JOY_1){
         if(state == BUTTON_LEFT){
-            scroll[X]--;
+            speed[X]--;
         }
         if(state == BUTTON_UP){
-            scroll[Y]++;
+            speed[Y]++;
         }
         if(state == BUTTON_RIGHT){
-            scroll[X]++;
+            speed[X]++;
         }
         if(state == BUTTON_DOWN){
-            scroll[Y]--;
+            speed[Y]--;
         }
         if(state == BUTTON_START){
             gameState = GAMEEXIT;

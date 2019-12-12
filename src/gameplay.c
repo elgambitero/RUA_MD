@@ -15,7 +15,10 @@ void gameplayLoop(u16 ind){
             gameState = GAME;
         break;
         case GAME:
+            scroll[X] += speed[X];
+            scroll[Y] += speed[Y];
             VDP_setHorizontalScroll(PLAN_A, scroll[X]);
+            VDP_setVerticalScroll(PLAN_A,scroll[Y]);
         break;
         case GAMEENDING:
 
