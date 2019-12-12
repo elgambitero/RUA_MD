@@ -3,9 +3,11 @@
 
 #include "states.h"
 
+
+
 void gameplayLoop();
 
-inline void gameControls(u16 joy, u16 changed, u16 state){
+static inline void gameControls(u16 joy, u16 changed, u16 state){
     if(state){
         mainStates = MAIN_MENU;
     }

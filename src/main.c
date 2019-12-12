@@ -1,8 +1,12 @@
 #include <genesis.h>
 
-#include "music.h"
 #include "states.h"
 #include "intro.h"
+#include "mainmenu.h"
+#include "ready.h"
+#include "gameplay.h"
+
+#include "music.h"
 
 #define PAL
 
@@ -20,24 +24,22 @@ void myJoyHandler( u16 joy, u16 changed, u16 state)
     if(joy == JOY_1){
         switch(mainStates){
             case INTRO:
-                if(state){
-                    introCount = 1;
-                }
+                introControls(joy, changed, state);
             break;
             case MAIN_MENU:
-                
+                menuControls(joy, changed, state);
             break;
             case READY:
-
+                return;
             break;
             case TRY_AGAIN:
-
+                //continueControls();
             break;
             case GAMEPLAY:
-
+                gameControls(joy, changed, state);
             break;
             case GAME_OVER:
-
+                //overControls();
             break;
         }
     }
@@ -66,8 +68,7 @@ int main()
                 introPlay(palette, ind);
             break;
             case MAIN_MENU:
-                VDP_setPaletteColor(15, 0xFFF);
-                VDP_drawText("Main Menu", 16, 13);
+                mainMenu();
             break;
             case READY:
 
@@ -76,7 +77,7 @@ int main()
 
             break;
             case GAMEPLAY:
-
+                gameplayLoop();
             break;
             case GAME_OVER:
 

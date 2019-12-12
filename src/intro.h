@@ -7,6 +7,15 @@
     #define FADEFRAMES 17
 #endif
 
+enum IntroStates{
+    MADE_WITH_SGDK = 0,
+    MUSIC_WITH_DEFLE,
+    BASED_ON_RUA,
+    FRAME
+    };
+
+enum IntroStates introStates;
+
 u16 introCount;
 
 #ifdef NTSC
@@ -16,5 +25,11 @@ u16 introCount;
 #endif
 
 void introPlay(u16* palette, u16 ind);
+
+static inline void introControls(u16 joy, u16 changed, u16 state){
+    if(state){
+        introCount = 1;
+    }
+}
 
 #endif
