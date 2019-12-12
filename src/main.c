@@ -78,7 +78,7 @@ int main()
                 mainMenu();
             break;
             case READY:
-
+                readyLoop(palette);
             break;
             case TRY_AGAIN:
 

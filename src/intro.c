@@ -95,6 +95,7 @@ void introPlay(u16* palette, u16 ind){
             }
             else{
                 VDP_clearPlan(PLAN_A, TRUE);
+                VDP_interruptFade();
                 mainState = MAIN_MENU;
             }   
         break;
