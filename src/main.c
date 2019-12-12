@@ -68,7 +68,7 @@ int main()
 {
     game_init();
 
-    SND_startPlay_XGM(intro_mus);
+    XGM_startPlay(intro_mus);
 
     while(1)
 	{
