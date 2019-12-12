@@ -52,7 +52,8 @@ void game_init(){
     JOY_init();
     JOY_setEventHandler( &myJoyHandler );
     mainState = INTRO;
-    menuState = ENTRY;
+    menuState = MENUENTRY;
+    readyState = READYENTRY;
     introState = MADE_WITH_SGDK;
     introCount = (introFrames[MADE_WITH_SGDK]);
     // set all palette to black

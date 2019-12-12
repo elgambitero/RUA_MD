@@ -4,9 +4,9 @@
 #include "states.h"
 
 enum MenuStates{
-    ENTRY,
+    MENUENTRY,
     MENU,
-    EXIT,
+    MENUEXIT,
 };
 
 enum MenuStates menuState;
@@ -15,7 +15,7 @@ void mainMenu();
 
 static inline void menuControls(u16 joy, u16 changed, u16 state){
     if(state){
-        mainState = MAIN_MENU;
+        mainState = READY;
     }
 }
 

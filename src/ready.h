@@ -4,9 +4,11 @@
 #include "states.h"
 
 enum ReadyStates{
-    ENTRY,
-    READY,
-    EXIT,
+    READYENTRY,
+    READY_FADE_IN,
+    READYLOOP,
+    READY_FADE_OUT,
+    READYEXIT,
 };
 
 enum ReadyStates readyState;

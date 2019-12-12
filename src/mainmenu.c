@@ -4,7 +4,7 @@
 
 void mainMenu(){
     switch(menuState){
-        case ENTRY:
+        case MENUENTRY:
             VDP_setPaletteColor(15, 0xFFF);
             VDP_drawText("Main Menu", 16, 13);
             menuState = MENU;
@@ -12,7 +12,7 @@ void mainMenu(){
         case MENU:
 
         break;
-        case EXIT:
+        case MENUEXIT:
 
         break;
     }
