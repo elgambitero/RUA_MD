@@ -13,7 +13,7 @@ void mainMenu(){
 
         break;
         case MENUEXIT:
-
+            VDP_clearPlan(PLAN_A, TRUE);
         break;
     }
 }

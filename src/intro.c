@@ -100,5 +100,4 @@ void introPlay(u16* palette, u16 ind){
             }   
         break;
     }
-    return;
 }
