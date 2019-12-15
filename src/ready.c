@@ -13,6 +13,7 @@ void readyLoop(u16 * palette){
             VDP_drawText("Ready?", 16, 13);
             palette[15] = 0xFFF;
             VDP_fadeIn(15, 15, palette, READYFADE, TRUE);
+            XGM_stopPlay();
             XGM_setPCM(BOOM_ID, boom, sizeof(boom));
             XGM_startPlayPCM(BOOM_ID, 0, SOUND_PCM_CH2);
             readyState = READY_FADE_IN;
