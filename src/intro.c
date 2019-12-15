@@ -10,7 +10,7 @@ void introPlay(u16* palette, u16 ind){
     {
         case MADE_WITH_SGDK:
             //entry
-            if(introCount == (introFrames[MADE_WITH_SGDK])){
+            if(introCount == (introFrames[introState])){
                 VDP_setPaletteColor(15, 0x000);
                 VDP_drawText("A game ported with", 7, 5);
                 ind = TILE_USERINDEX;
@@ -39,7 +39,7 @@ void introPlay(u16* palette, u16 ind){
             }         
         break;
         case MUSIC_WITH_DEFLE:
-            if(introCount == (introFrames[MADE_WITH_SGDK])){
+            if(introCount == (introFrames[introState])){
                 VDP_setPaletteColor(15, 0x000);
                 VDP_drawText("Original OST by Erasure", 8, 10);
                 VDP_drawText("Music sequenced with DefleMask", 5, 13);
@@ -62,7 +62,7 @@ void introPlay(u16* palette, u16 ind){
             } 
         break;
         case BASED_ON_RUA:
-            if(introCount == (introFrames[MADE_WITH_SGDK])){
+            if(introCount == (introFrames[introState])){
                 VDP_setPaletteColor(15, 0x000);
                 VDP_drawText("Based on the flash game by Adult Swim", 1, 13);
                  //Fade in PAL1 plus the text color
@@ -81,17 +81,17 @@ void introPlay(u16* palette, u16 ind){
             }   
         break;
         case FRAME:
-            if(introCount == (introFrames[MADE_WITH_SGDK])){
+            if(introCount == (introFrames[FRAME])){
                 VDP_setPaletteColor(15, 0x000);
-                VDP_drawText("FRAME", 16, 13);
+                VDP_drawText("Hey!", 20, 5);
+                VDP_drawText("Want to really play this", 8, 7);
+                VDP_drawText("game that was illegally", 9, 9);
+                VDP_drawText("stolen from Adult Swim?", 9, 11);
                 VDP_setPaletteColor(15, 0xFFF);
-                 //Fade in PAL1 plus the text color
-                VDP_fadeIn(0, 31, palette, FADEFRAMES, TRUE);
 
             }
             if(introCount) {
                 introCount--;
-                if(introCount == FADEFRAMES) VDP_fadeOutAll(FADEFRAMES, TRUE);
                 return;
             }
             else{
