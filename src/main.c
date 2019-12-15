@@ -7,6 +7,7 @@
 #include "gameplay.h"
 
 #include "music.h"
+#include "sound.h"
 
 #define PAL
 
@@ -52,13 +53,14 @@ void game_init(){
     JOY_init();
     JOY_setEventHandler( &myJoyHandler );
     VDP_setScreenWidth320();
+
     mainState = INTRO;
     menuState = MENUENTRY;
     readyState = READYENTRY;
     gameState = GAMEINIT;
     introState = MADE_WITH_SGDK;
     introCount = (introFrames[MADE_WITH_SGDK]);
-    // set all palette to black
+    
     VDP_setPaletteColors(0, (u16*) palette_black, 64);
 
     SYS_enableInts();
