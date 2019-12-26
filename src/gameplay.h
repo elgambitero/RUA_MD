@@ -22,19 +22,19 @@ void gameplayLoop(u16 ind);
 
 static inline void gameControls(u16 joy, u16 changed, u16 state){
     if(joy == JOY_1){
-        if(state == BUTTON_LEFT){
+        if(state & BUTTON_LEFT){
             speed[X]--;
         }
-        if(state == BUTTON_UP){
+        if(state & BUTTON_UP){
             speed[Y]++;
         }
-        if(state == BUTTON_RIGHT){
+        if(state & BUTTON_RIGHT){
             speed[X]++;
         }
-        if(state == BUTTON_DOWN){
+        if(state & BUTTON_DOWN){
             speed[Y]--;
         }
-        if(state == BUTTON_START){
+        if(state & BUTTON_START){
             gameState = GAMEEXIT;
         }
     }
