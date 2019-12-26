@@ -9,9 +9,9 @@ void gameplayLoop(u16 ind){
     switch(gameState){
         case GAMEINIT:
             scroll[X] = 0;
-            scroll[Y] = 1;
+            scroll[Y] = 0;
             XGM_startPlay(always_mus);
-            VDP_drawImageEx(PLAN_A, &tile194, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, ind), 0, 0, TRUE, TRUE);
+            VDP_drawImageEx(PLAN_A, section_1.image, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, ind), 0, 0, TRUE, TRUE);
             gameState = GAME;
         break;
         case GAME:
@@ -26,6 +26,12 @@ void gameplayLoop(u16 ind){
         case GAMEEXIT:
             VDP_clearPlan(PLAN_A, TRUE);
             VDP_clearPlan(PLAN_B, TRUE);
+
+            VDP_setHorizontalScroll(PLAN_A, 0);
+            VDP_setHorizontalScroll(PLAN_B, 0);
+            VDP_setVerticalScroll(PLAN_A, 0);
+            VDP_setVerticalScroll(PLAN_B, 0);
+
             gameState = GAMEINIT;
             mainState = MAIN_MENU;
             XGM_startPlay(intro_mus);

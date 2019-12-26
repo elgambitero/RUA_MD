@@ -1,1 +1,0 @@
-IMAGE tile194 "scenery/194.bmp" BEST
