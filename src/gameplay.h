@@ -1,9 +1,8 @@
 #ifndef GAMEPLAY_H
 #define GAMEPLAY_H
 
-#include <genesis.h>
-
 #include "states.h"
+#include "scenery.h"
 
 #define X 0
 #define Y 1
@@ -13,10 +12,20 @@
 
 #define REFRESH_STEP 4
 
-s16 scroll[2];
-s16 speed[2];
-u16 drawn[2];
-const u8 margin[2] = { 80, 4 };
+s16 scroll[2] = {0, 0}; //px
+s16 speed[2] = {0, 0}; //px/frame
+
+u16 drawn[2] = {0, 0}; //px
+const u8 margin[2] = { 80, 4 }; //px
+u16 secPos[2]; //px
+
+const Section * currentSection;
+u16 ind;
+
+s16 blockPos[2];
+s16 cropPos[2];
+u16 cropPos_map[2];
+u16 cropSize[2];
 
 enum GameStates{
     GAMEINIT,

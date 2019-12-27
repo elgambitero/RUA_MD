@@ -3,23 +3,43 @@
 #include "gameplay.h"
 
 #include "music.h"
-#include "scenery.h"
-
-const Section * currentSection;
-u16 ind;
+#include "math.h"
 
 //VDP_drawImageEx(PLAN_A, section.image, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, ind), _x, _y, TRUE, TRUE);
 
 void pollSection(){
     if(currentSection == &section_1) currentSection = &section_2;
     else currentSection = &section_1;
+    secPos[X] = ( screenWidth + scroll[X] ) % ( 8 * planWidth );
+    secPos[Y] = ( ( screenHeight / 2 ) + scroll[Y] ) % ( 8 * planHeight );
 }
 
 void refreshScene(){
     const Section * secPtr = currentSection;
     if(scroll[X] + screenWidth + margin[X] > drawn[X]){
         while ( secPtr ){
-            u16 VDP_setMapEx(VDPPlan plan, const Map *map, u16 basetile, u16 x, u16 y, u16 xm, u16 ym, u16 wm, u16 hm)
+
+            blockPos[X] = secPos[X] + secPtr->x;
+            blockPos[Y] = secPos[Y] + secPtr->y;
+            if( blockPos[X] + planWidth > ( drawn[2] / 8 ) + planWidth && 
+                blockPos[X] + secPtr->image->map->w + planWidth < ( drawn[2] / 8 ) + planWidth ){
+                    continue;
+                }
+            cropPos[X] = drawn[X] / 8;
+            cropPos[Y] = ( drawn[Y] + margin[Y] ) / 8;
+            cropPos_map[X] = cropPos[X] - blockPos[X];
+            cropPos_map[Y] = cropPos[Y] - blockPos[Y];
+            cropSize[X] = saturate(secPtr->image->map->w - cropPos_map[X], 0, REFRESH_STEP);
+            cropSize[Y] = saturate(secPtr->image->map->h - cropPos_map[Y], 0, planHeight);
+            
+            VDP_setMapEx(PLAN_A, secPtr->image->map, 
+                TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, ind), 
+                cropPos[X], cropPos[Y], 
+                cropPos_map[X], cropPos_map[Y],
+                cropSize[X], cropSize[Y]);
+            
+            drawn[X] = ( drawn[X] + ( 8 * REFRESH_STEP ) ) % ( 8 * planHeight );
+            ind += REFRESH_STEP + planHeight;
             secPtr = secPtr->next;
         }
     }
