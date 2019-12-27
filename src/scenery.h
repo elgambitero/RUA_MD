@@ -11,6 +11,7 @@ typedef struct{
     struct Section * next;
 }Section;
 
-const Section section_1 = {0, 50, &tile194, 0};
+const Section section_1 = {0, 0, &tile194, 0};
+const Section section_2 = {0, 0, &tile192, 0};
 
 #endif 
