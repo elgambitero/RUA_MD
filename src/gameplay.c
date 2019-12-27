@@ -21,6 +21,8 @@ s16 cropPos[2];
 u16 cropPos_map[2];
 u16 cropSize[2];
 
+u8 updateCount;
+
 void pollSection(){
     if(currentSection == &section_1) currentSection = &section_2;
     else currentSection = &section_1;
@@ -72,6 +74,7 @@ void gameplayLoop(){
             XGM_startPlay(always_mus);
             pollSection();
             gameState = GAME;
+            updateCount = REFRESH_RATE;
             VDP_drawImageEx(PLAN_B, &tile125, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, ind), 0, 0, TRUE, TRUE);
             VDP_setBackgroundColor(47);
             VDP_setPaletteColor(47, 0xF77);
@@ -84,7 +87,7 @@ void gameplayLoop(){
             VDP_setHorizontalScroll(PLAN_A, scroll[X]);
             VDP_setHorizontalScroll(PLAN_B, scroll[X] / 2);
             VDP_setVerticalScroll(PLAN_A,scroll[Y]);
-            //refreshScene();
+            if( !updateCount ) { refreshScene(); updateCount--; }
         break;
         case GAMEENDING:
 

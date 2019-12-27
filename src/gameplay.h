@@ -11,6 +11,8 @@
 
 #define REFRESH_STEP 4
 
+#define REFRESH_RATE 20
+
 s16 scroll[2]; //px
 s16 speed[2]; //px per frame
 
