@@ -30,13 +30,13 @@ void refreshScene();
 static inline void gameControls(u16 joy, u16 changed, u16 state){
     if(joy == JOY_1){
         if(state & BUTTON_LEFT){
-            speed[X]--;
+            speed[X]++;
         }
         if(state & BUTTON_UP){
             speed[Y]++;
         }
         if(state & BUTTON_RIGHT){
-            speed[X]++;
+            speed[X]--;
         }
         if(state & BUTTON_DOWN){
             speed[Y]--;

@@ -30,7 +30,7 @@ void pollSection(){
 
 void refreshScene(){
     const Section * secPtr = currentSection;
-    if(scroll[X] + screenWidth + margin[X] > drawn[X]){
+    if( ( scroll[X] + screenWidth + margin[X] ) % ( 8 * planWidth ) > drawn[X]){
         while ( secPtr ){
 
             blockPos[X] = secPos[X] + secPtr->x;
@@ -72,6 +72,9 @@ void gameplayLoop(){
             XGM_startPlay(always_mus);
             pollSection();
             gameState = GAME;
+            VDP_drawImageEx(PLAN_B, &tile125, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, ind), 0, 0, TRUE, TRUE);
+            VDP_setBackgroundColor(47);
+            VDP_setPaletteColor(47, 0xF77);
 
             SYS_enableInts();
         break;
@@ -79,8 +82,9 @@ void gameplayLoop(){
             scroll[X] += speed[X];
             scroll[Y] += speed[Y];
             VDP_setHorizontalScroll(PLAN_A, scroll[X]);
+            VDP_setHorizontalScroll(PLAN_B, scroll[X] / 2);
             VDP_setVerticalScroll(PLAN_A,scroll[Y]);
-            refreshScene();
+            //refreshScene();
         break;
         case GAMEENDING:
 
@@ -93,6 +97,7 @@ void gameplayLoop(){
             VDP_setHorizontalScroll(PLAN_B, 0);
             VDP_setVerticalScroll(PLAN_A, 0);
             VDP_setVerticalScroll(PLAN_B, 0);
+            VDP_setBackgroundColor(0);
 
             gameState = GAMEINIT;
             mainState = MAIN_MENU;
