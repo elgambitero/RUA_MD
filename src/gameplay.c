@@ -4,8 +4,22 @@
 
 #include "music.h"
 #include "math.h"
+#include "scenery.h"
 
 //VDP_drawImageEx(PLAN_A, section.image, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, ind), _x, _y, TRUE, TRUE);
+
+u16 drawn[2] = {0, 0}; //px
+const u8 margin[2] = { 80, 4 }; //px
+
+u16 secPos[2]; //px
+
+const Section * currentSection;
+u16 ind;
+
+s16 blockPos[2];
+s16 cropPos[2];
+u16 cropPos_map[2];
+u16 cropSize[2];
 
 void pollSection(){
     if(currentSection == &section_1) currentSection = &section_2;
@@ -21,7 +35,7 @@ void refreshScene(){
 
             blockPos[X] = secPos[X] + secPtr->x;
             blockPos[Y] = secPos[Y] + secPtr->y;
-            if( blockPos[X] + planWidth > ( drawn[2] / 8 ) + planWidth && 
+            if( blockPos[X] + planWidth > ( drawn[2] / 8 ) + planWidth || 
                 blockPos[X] + secPtr->image->map->w + planWidth < ( drawn[2] / 8 ) + planWidth ){
                     continue;
                 }
@@ -53,6 +67,8 @@ void gameplayLoop(){
             ind = TILE_USERINDEX;
             scroll[X] = 0;
             scroll[Y] = 0;
+            speed[X] = 0;
+            speed[Y] = 0;
             XGM_startPlay(always_mus);
             pollSection();
             gameState = GAME;
