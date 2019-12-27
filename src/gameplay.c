@@ -87,7 +87,8 @@ void gameplayLoop(){
             VDP_setHorizontalScroll(PLAN_A, scroll[X]);
             VDP_setHorizontalScroll(PLAN_B, scroll[X] / 2);
             VDP_setVerticalScroll(PLAN_A,scroll[Y]);
-            if( !updateCount ) { refreshScene(); updateCount--; }
+            if( updateCount == 0 ) { refreshScene(); updateCount = REFRESH_RATE; }
+            updateCount--;
         break;
         case GAMEENDING:
 
