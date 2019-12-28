@@ -35,11 +35,15 @@ void pollSection(){
         blockIndex[i] = blockIndex[i-1];
         VDP_loadTileSet(secPtr->image->tileset, blockIndex[i], CPU);
         VDP_setPaletteColors(16, secPtr->image->palette->data, secPtr->image->palette->length);
+
+        /*
         VDP_setMapEx(PLAN_A, secPtr->image->map, 
             TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, blockIndex[i]), 
             10, 10, 
             0, 0,
             10, 10);
+        */
+
         blockIndex[i] += secPtr->image->tileset->numTile;
 
         
@@ -93,7 +97,7 @@ void gameplayLoop(){
             scroll[Y] = 0;
             speed[X] = 0;
             speed[Y] = 0;
-            drawn[X] = planWidth * 8;
+            drawn[X] = planWidth * 4;
             XGM_startPlay(always_mus);
             gameState = GAME;
             updateCount = REFRESH_RATE;
