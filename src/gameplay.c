@@ -33,12 +33,11 @@ void pollSection(){
     u8 i = 1;
     while( secPtr ){
         blockIndex[i] = blockIndex[i-1];
-        VDP_loadTileData(secPtr->image->tileset->tiles, blockIndex[i], 
-            secPtr->image->tileset->numTile, DMA);
+        VDP_loadTileSet(secPtr->image->tileset, blockIndex[i], CPU);
         VDP_setPaletteColors(16, secPtr->image->palette->data, secPtr->image->palette->length);
         VDP_setMapEx(PLAN_A, secPtr->image->map, 
             TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, blockIndex[i]), 
-            0, 0, 
+            10, 10, 
             0, 0,
             10, 10);
         blockIndex[i] += secPtr->image->tileset->numTile;
