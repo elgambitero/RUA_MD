@@ -14,7 +14,6 @@ const u8 margin[2] = { 80, 4 }; //px
 u16 secPos[2]; //px
 
 const Section * currentSection;
-u16 ind;
 
 s16 blockPos[2];
 s16 cropPos[2];
@@ -35,8 +34,8 @@ void pollSection(){
     while( secPtr ){
         blockIndex[i] = blockIndex[i-1];
         VDP_loadTileData(secPtr->image->tileset->tiles, blockIndex[i], 
-            secPtr->image->tileset->numTile, CPU);
-        VDP_setPaletteColors(16, secPtr->image->palette->data, 16);
+            secPtr->image->tileset->numTile, DMA);
+        VDP_setPaletteColors(16, secPtr->image->palette->data, secPtr->image->palette->length);
         VDP_setMapEx(PLAN_A, secPtr->image->map, 
             TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, blockIndex[i]), 
             0, 0, 
@@ -54,6 +53,7 @@ void pollSection(){
 void refreshScene(){
     const Section * secPtr = currentSection;
     if( ( scroll[X] + screenWidth + margin[X] ) > drawn[X] ){
+        u8 i = 1;
         while ( secPtr ){
 
             blockPos[X] = secPos[X] + secPtr->x;
@@ -73,12 +73,13 @@ void refreshScene(){
             cropSize[Y] = saturate(secPtr->image->map->h - cropPos_map[Y], 0, planHeight);
             
             VDP_setMapEx(PLAN_A, secPtr->image->map, 
-                TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, ind), 
+                TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, blockIndex[i]), 
                 cropPos[X] % planWidth, cropPos[Y] % planHeight, 
                 cropPos_map[X], cropPos_map[Y],
                 cropSize[X], cropSize[Y]);
             
             drawn[X] += ( 8 * REFRESH_STEP );
+            i++;
             secPtr = secPtr->next;
         }
     }
@@ -89,7 +90,6 @@ void gameplayLoop(){
         case GAMEINIT:
             SYS_disableInts();
 
-            ind = TILE_USERINDEX;
             scroll[X] = 0;
             scroll[Y] = 0;
             speed[X] = 0;
@@ -98,7 +98,7 @@ void gameplayLoop(){
             XGM_startPlay(always_mus);
             gameState = GAME;
             updateCount = REFRESH_RATE;
-            VDP_drawImageEx(PLAN_B, &background, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, ind), 0, 0, TRUE, TRUE);
+            VDP_drawImageEx(PLAN_B, &background, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, blockIndex[0]), 0, 0, TRUE, TRUE);
             blockIndex[0] += background.tileset->numTile;
 
             pollSection();
