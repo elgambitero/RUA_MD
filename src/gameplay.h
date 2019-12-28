@@ -13,6 +13,8 @@
 
 #define REFRESH_RATE 20
 
+#define BLOCKS 3
+
 s16 scroll[2]; //px
 s16 speed[2]; //px per frame
 

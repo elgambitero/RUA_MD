@@ -21,26 +21,50 @@ s16 cropPos[2];
 u16 cropPos_map[2];
 u16 cropSize[2];
 
+u16 blockIndex[BLOCKS + 1] = {TILE_USERINDEX, TILE_USERINDEX, TILE_USERINDEX, TILE_USERINDEX};
+
 u8 updateCount;
 
 void pollSection(){
     if(currentSection == &section_1) currentSection = &section_2;
     else currentSection = &section_1;
-    secPos[X] = ( screenWidth + scroll[X] ) % ( 8 * planWidth );
-    secPos[Y] = ( ( screenHeight / 2 ) + scroll[Y] ) % ( 8 * planHeight );
+    secPos[X] = ( screenWidth + scroll[X] );
+    secPos[Y] = ( ( screenHeight / 2 ) + scroll[Y] );
+    const Section * secPtr = currentSection;
+    u8 i = 1;
+    while( secPtr ){
+        blockIndex[i] = blockIndex[i-1];
+        VDP_loadTileData(secPtr->image->tileset->tiles, blockIndex[i], 
+            secPtr->image->tileset->numTile, CPU);
+        VDP_setPaletteColors(16, secPtr->image->palette->data, 16);
+        VDP_setMapEx(PLAN_A, secPtr->image->map, 
+            TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, blockIndex[i]), 
+            0, 0, 
+            0, 0,
+            10, 10);
+        blockIndex[i] += secPtr->image->tileset->numTile;
+
+        
+
+        i++;
+        secPtr = secPtr->next;
+    }
 }
 
 void refreshScene(){
     const Section * secPtr = currentSection;
-    if( ( scroll[X] + screenWidth + margin[X] ) % ( 8 * planWidth ) > drawn[X]){
+    if( ( scroll[X] + screenWidth + margin[X] ) > drawn[X] ){
         while ( secPtr ){
 
             blockPos[X] = secPos[X] + secPtr->x;
             blockPos[Y] = secPos[Y] + secPtr->y;
+            /*
             if( blockPos[X] + planWidth > ( drawn[2] / 8 ) + planWidth || 
                 blockPos[X] + secPtr->image->map->w + planWidth < ( drawn[2] / 8 ) + planWidth ){
+                    secPtr = secPtr->next;
                     continue;
                 }
+                */
             cropPos[X] = drawn[X] / 8;
             cropPos[Y] = ( drawn[Y] + margin[Y] ) / 8;
             cropPos_map[X] = cropPos[X] - blockPos[X];
@@ -50,12 +74,11 @@ void refreshScene(){
             
             VDP_setMapEx(PLAN_A, secPtr->image->map, 
                 TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, ind), 
-                cropPos[X], cropPos[Y], 
+                cropPos[X] % planWidth, cropPos[Y] % planHeight, 
                 cropPos_map[X], cropPos_map[Y],
                 cropSize[X], cropSize[Y]);
             
-            drawn[X] = ( drawn[X] + ( 8 * REFRESH_STEP ) ) % ( 8 * planHeight );
-            ind += REFRESH_STEP + planHeight;
+            drawn[X] += ( 8 * REFRESH_STEP );
             secPtr = secPtr->next;
         }
     }
@@ -71,11 +94,14 @@ void gameplayLoop(){
             scroll[Y] = 0;
             speed[X] = 0;
             speed[Y] = 0;
+            drawn[X] = planWidth * 8;
             XGM_startPlay(always_mus);
-            pollSection();
             gameState = GAME;
             updateCount = REFRESH_RATE;
-            VDP_drawImageEx(PLAN_B, &tile125, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, ind), 0, 0, TRUE, TRUE);
+            VDP_drawImageEx(PLAN_B, &background, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, ind), 0, 0, TRUE, TRUE);
+            blockIndex[0] += background.tileset->numTile;
+
+            pollSection();
             VDP_setBackgroundColor(47);
             VDP_setPaletteColor(47, 0xF77);
 
