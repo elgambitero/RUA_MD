@@ -56,7 +56,7 @@ void pollSection(){
 void refreshScene(){
     const Section * secPtr = currentSection;
     if( ( scroll[X] + screenWidth + margin[X] ) > drawn[X] ){
-        u8 i = 1;
+        u8 i = 0;
         while ( secPtr ){
 
             blockPos[X] = secPos[X] + secPtr->x;
@@ -78,8 +78,12 @@ void refreshScene(){
             VDP_setMapEx(PLAN_A, secPtr->image->map, 
                 TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, blockIndex[i]), 
                 cropPos[X] % planWidth, cropPos[Y] % planHeight, 
+                0, 0,
+                10, 10);
+                /*
                 cropPos_map[X], cropPos_map[Y],
                 cropSize[X], cropSize[Y]);
+                */
             
             drawn[X] += ( 8 * REFRESH_STEP );
             i++;
