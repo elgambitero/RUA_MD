@@ -7,7 +7,7 @@
 #define Y 1
 
 typedef struct Rect{
-    u32 pos[2];
+    s32 pos[2];
     u16 size[2];
 } Rect;
 

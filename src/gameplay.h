@@ -10,6 +10,7 @@
 #define SCREEN_HEIGHT 30
 
 #define REFRESH_STEP 4
+#define REFRESH_STEP_PX (8 * REFRESH_STEP)
 
 #define REFRESH_RATE 20
 

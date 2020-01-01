@@ -10,15 +10,12 @@
 
 u16 drawn[2] = {0, 0}; //px
 const u8 margin[2] = { 80, 4 }; //px
+Rect hRefresh;
+
 
 u16 secPos[2]; //px
 
 const Section * currentSection;
-
-s16 blockPos[2];
-s16 cropPos[2];
-u16 cropPos_map[2];
-u16 cropSize[2];
 
 u16 blockIndex[BLOCKS + 1] = {TILE_USERINDEX, TILE_USERINDEX, TILE_USERINDEX, TILE_USERINDEX};
 
@@ -55,37 +52,36 @@ void pollSection(){
 
 void refreshScene(){
     const Section * secPtr = currentSection;
-    if( ( scroll[X] + screenWidth + margin[X] ) > drawn[X] ){
+    if( drawn[X] - scroll[X] > REFRESH_STEP_PX ){
+        hRefresh.pos[X] = scroll[X] + screenWidth + margin[X];
+        hRefresh.pos[Y] = scroll[Y] - margin[Y];
         u8 i = 0;
         while ( secPtr ){
+            
+            Rect block;
+            block.pos[X] = secPos[X] + secPtr->pos[X];
+            block.pos[Y] = secPos[Y] + secPtr->pos[Y];
+            block.size[X] = 8 * secPtr->image->map->w;
+            block.size[Y] = 8 * secPtr->image->map->h;
 
-            blockPos[X] = secPos[X] + secPtr->pos[X];
-            blockPos[Y] = secPos[Y] + secPtr->pos[Y];
-            /*
-            if( blockPos[X] + planWidth > ( drawn[2] / 8 ) + planWidth || 
-                blockPos[X] + secPtr->image->map->w + planWidth < ( drawn[2] / 8 ) + planWidth ){
-                    secPtr = secPtr->next;
-                    continue;
-                }
-                */
-            cropPos[X] = drawn[X] / 8;
-            cropPos[Y] = ( drawn[Y] + margin[Y] ) / 8;
-            cropPos_map[X] = cropPos[X] - blockPos[X];
-            cropPos_map[Y] = cropPos[Y] - blockPos[Y];
-            cropSize[X] = saturate(secPtr->image->map->w - cropPos_map[X], 0, REFRESH_STEP);
-            cropSize[Y] = saturate(secPtr->image->map->h - cropPos_map[Y], 0, planHeight);
+            Rect inter = intersect(hRefresh, block);
+            
+            if(inter.size[X] < 0 || inter.size[Y] < 0) continue;
+
+            Rect mapCrop;
+            mapCrop.pos[X] = ( inter.pos[X] - block.pos[X] ) / 8;
+            mapCrop.pos[Y] = ( inter.pos[Y] - block.pos[Y] ) / 8;
+            mapCrop.size[X] = inter.size[X] / 8;
+            mapCrop.size[Y] = inter.size[Y] / 8;
             
             VDP_setMapEx(PLAN_A, secPtr->image->map, 
                 TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, blockIndex[i]), 
-                cropPos[X] % planWidth, cropPos[Y] % planHeight, 
-                0, 0,
-                10, 10);
-                /*
-                cropPos_map[X], cropPos_map[Y],
-                cropSize[X], cropSize[Y]);
-                */
+                inter.pos[X] % planWidth, inter.pos[Y] % planHeight, 
+                mapCrop.pos[X], mapCrop.pos[Y],
+                mapCrop.size[X], mapCrop.size[Y] );
             
-            drawn[X] += ( 8 * REFRESH_STEP );
+            drawn[X] = scroll[X];
+            drawn[Y] = scroll[Y];
             i++;
             secPtr = secPtr->next;
         }
@@ -101,16 +97,24 @@ void gameplayLoop(){
             scroll[Y] = 0;
             speed[X] = 0;
             speed[Y] = 0;
-            drawn[X] = planWidth * 4;
+
+            hRefresh.pos[X] = 0;
+            hRefresh.pos[Y] = 0;
+            hRefresh.size[X] = REFRESH_STEP_PX;
+            hRefresh.size[Y] = planHeight;
+
             XGM_startPlay(always_mus);
+
             gameState = GAME;
             updateCount = REFRESH_RATE;
+
             VDP_drawImageEx(PLAN_B, &background, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, blockIndex[0]), 0, 0, TRUE, TRUE);
+            VDP_setBackgroundColor(47);
+            VDP_setPaletteColor(47, 0xF77);
+
             blockIndex[0] += background.tileset->numTile;
 
             pollSection();
-            VDP_setBackgroundColor(47);
-            VDP_setPaletteColor(47, 0xF77);
 
             SYS_enableInts();
         break;

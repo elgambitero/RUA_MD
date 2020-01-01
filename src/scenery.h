@@ -6,7 +6,7 @@
 #include "scenery_gfx.h"
 
 typedef struct Section{
-    s16 pos[2];
+    s32 pos[2];
     const Image * image;
     const struct Section * next;
 } Section ;
