@@ -6,12 +6,9 @@
 #include "math.h"
 #include "scenery.h"
 
-//VDP_drawImageEx(PLAN_A, section.image, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, ind), _x, _y, TRUE, TRUE);
-
-u16 drawn[2] = {0, 0}; //px
-const u8 margin[2] = { 80, 4 }; //px
+s32 drawn[2] = {0, 0}; //px
+const u8 margin[2] = { 40, 4 }; //px
 Rect hRefresh;
-
 
 u16 secPos[2]; //px
 
@@ -24,8 +21,12 @@ u8 updateCount;
 void pollSection(){
     if(currentSection == &section_1) currentSection = &section_2;
     else currentSection = &section_1;
+    secPos[X] = 0;
+    secPos[Y] = 0;
+    /*
     secPos[X] = ( screenWidth + scroll[X] );
     secPos[Y] = ( ( screenHeight / 2 ) + scroll[Y] );
+    */
     const Section * secPtr = currentSection;
     u8 i = 1;
     while( secPtr ){
@@ -33,17 +34,7 @@ void pollSection(){
         VDP_loadTileSet(secPtr->image->tileset, blockIndex[i], CPU);
         VDP_setPaletteColors(16, secPtr->image->palette->data, secPtr->image->palette->length);
 
-        /*
-        VDP_setMapEx(PLAN_A, secPtr->image->map, 
-            TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, blockIndex[i]), 
-            10, 10, 
-            0, 0,
-            10, 10);
-        */
-
         blockIndex[i] += secPtr->image->tileset->numTile;
-
-        
 
         i++;
         secPtr = secPtr->next;
@@ -52,40 +43,41 @@ void pollSection(){
 
 void refreshScene(){
     const Section * secPtr = currentSection;
-    if( drawn[X] - scroll[X] > REFRESH_STEP_PX ){
-        hRefresh.pos[X] = scroll[X] + screenWidth + margin[X];
-        hRefresh.pos[Y] = scroll[Y] - margin[Y];
-        u8 i = 0;
-        while ( secPtr ){
-            
-            Rect block;
-            block.pos[X] = secPos[X] + secPtr->pos[X];
-            block.pos[Y] = secPos[Y] + secPtr->pos[Y];
-            block.size[X] = 8 * secPtr->image->map->w;
-            block.size[Y] = 8 * secPtr->image->map->h;
 
-            Rect inter = intersect(hRefresh, block);
-            
-            if(inter.size[X] < 0 || inter.size[Y] < 0) continue;
+    hRefresh.pos[X] = scroll[X] + screenWidth + margin[X];
+    hRefresh.pos[Y] = scroll[Y] - margin[Y];
+    u8 i = 0;
+    while ( secPtr ){
+        
+        Rect block;
+        block.pos[X] = secPos[X] + secPtr->pos[X];
+        block.pos[Y] = secPos[Y] + secPtr->pos[Y];
+        block.size[X] = 8 * secPtr->image->map->w;
+        block.size[Y] = 8 * secPtr->image->map->h;
 
-            Rect mapCrop;
-            mapCrop.pos[X] = ( inter.pos[X] - block.pos[X] ) / 8;
-            mapCrop.pos[Y] = ( inter.pos[Y] - block.pos[Y] ) / 8;
-            mapCrop.size[X] = inter.size[X] / 8;
-            mapCrop.size[Y] = inter.size[Y] / 8;
-            
-            VDP_setMapEx(PLAN_A, secPtr->image->map, 
-                TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, blockIndex[i]), 
-                inter.pos[X] % planWidth, inter.pos[Y] % planHeight, 
-                mapCrop.pos[X], mapCrop.pos[Y],
-                mapCrop.size[X], mapCrop.size[Y] );
-            
-            drawn[X] = scroll[X];
-            drawn[Y] = scroll[Y];
-            i++;
-            secPtr = secPtr->next;
-        }
+        Rect inter = intersect(hRefresh, block);
+
+        if( inter.size[X] < 0 || inter.size[Y] < 0 ) continue;
+
+        Rect mapCrop;
+        mapCrop.pos[X] = ( inter.pos[X] - block.pos[X] ) / 8;
+        mapCrop.pos[Y] = ( inter.pos[Y] - block.pos[Y] ) / 8;
+        mapCrop.size[X] = inter.size[X] / 8;
+        mapCrop.size[Y] = inter.size[Y] / 8;
+
+        VDP_setMapEx(PLAN_A, secPtr->image->map, 
+            TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, blockIndex[i]), 
+            inter.pos[X] % planWidth, inter.pos[Y] % planHeight, 
+            mapCrop.pos[X], mapCrop.pos[Y],
+            mapCrop.size[X], mapCrop.size[Y] );
+
+        i++;
+        secPtr = secPtr->next;
     }
+
+    drawn[X] = scroll[X];
+    drawn[Y] = scroll[Y];
+
 }
 
 void gameplayLoop(){
@@ -124,7 +116,11 @@ void gameplayLoop(){
             VDP_setHorizontalScroll(PLAN_A, scroll[X]);
             VDP_setHorizontalScroll(PLAN_B, scroll[X] / 2);
             VDP_setVerticalScroll(PLAN_A,scroll[Y]);
-            refreshScene();
+
+            if( scroll[X] - drawn[X] > REFRESH_STEP_PX ){
+                refreshScene();
+            }
+
         break;
         case GAMEENDING:
 
