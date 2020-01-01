@@ -59,8 +59,8 @@ void refreshScene(){
         u8 i = 0;
         while ( secPtr ){
 
-            blockPos[X] = secPos[X] + secPtr->x;
-            blockPos[Y] = secPos[Y] + secPtr->y;
+            blockPos[X] = secPos[X] + secPtr->pos[X];
+            blockPos[Y] = secPos[Y] + secPtr->pos[Y];
             /*
             if( blockPos[X] + planWidth > ( drawn[2] / 8 ) + planWidth || 
                 blockPos[X] + secPtr->image->map->w + planWidth < ( drawn[2] / 8 ) + planWidth ){
