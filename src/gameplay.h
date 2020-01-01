@@ -16,7 +16,6 @@
 
 #define BLOCKS 3
 
-s32 scroll[2]; //px
 s16 speed[2]; //px per frame
 
 enum GameStates{
@@ -35,13 +34,13 @@ void refreshScene();
 static inline void gameControls(u16 joy, u16 changed, u16 state){
     if(joy == JOY_1){
         if(state & BUTTON_LEFT){
-            speed[X]++;
+            speed[X]--;
         }
         if(state & BUTTON_UP){
             speed[Y]++;
         }
         if(state & BUTTON_RIGHT){
-            speed[X]--;
+            speed[X]++;
         }
         if(state & BUTTON_DOWN){
             speed[Y]--;

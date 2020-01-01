@@ -6,9 +6,13 @@
 #include "math.h"
 #include "scenery.h"
 
-s32 drawn[2] = {0, 0}; //px
+s32 cam_pos[2]; //px
+s32 drawn[2]; //px
+
 const u8 margin[2] = { 40, 4 }; //px
 Rect hRefresh;
+
+u32 color = 0;
 
 u16 secPos[2]; //px
 
@@ -21,12 +25,8 @@ u8 updateCount;
 void pollSection(){
     if(currentSection == &section_1) currentSection = &section_2;
     else currentSection = &section_1;
-    secPos[X] = 0;
-    secPos[Y] = 0;
-    /*
-    secPos[X] = ( screenWidth + scroll[X] );
-    secPos[Y] = ( ( screenHeight / 2 ) + scroll[Y] );
-    */
+    secPos[X] = ( screenWidth + cam_pos[X] );
+    secPos[Y] = ( ( screenHeight / 2 ) + cam_pos[Y] );
     const Section * secPtr = currentSection;
     u8 i = 1;
     while( secPtr ){
@@ -44,8 +44,8 @@ void pollSection(){
 void refreshScene(){
     const Section * secPtr = currentSection;
 
-    hRefresh.pos[X] = scroll[X] + screenWidth + margin[X];
-    hRefresh.pos[Y] = scroll[Y] - margin[Y];
+    hRefresh.pos[X] = cam_pos[X] + screenWidth + margin[X];
+    hRefresh.pos[Y] = cam_pos[Y] - margin[Y];
     u8 i = 0;
     while ( secPtr ){
         
@@ -67,7 +67,7 @@ void refreshScene(){
 
         VDP_setMapEx(PLAN_A, secPtr->image->map, 
             TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, blockIndex[i]), 
-            inter.pos[X] % planWidth, inter.pos[Y] % planHeight, 
+            (inter.pos[X] / 8) % planWidth, ( inter.pos[Y] / 8 ) % planHeight, 
             mapCrop.pos[X], mapCrop.pos[Y],
             mapCrop.size[X], mapCrop.size[Y] );
 
@@ -75,8 +75,8 @@ void refreshScene(){
         secPtr = secPtr->next;
     }
 
-    drawn[X] = scroll[X];
-    drawn[Y] = scroll[Y];
+    drawn[X] = cam_pos[X];
+    drawn[Y] = cam_pos[Y];
 
 }
 
@@ -85,15 +85,17 @@ void gameplayLoop(){
         case GAMEINIT:
             SYS_disableInts();
 
-            scroll[X] = 0;
-            scroll[Y] = 0;
+            cam_pos[X] = 0;
+            cam_pos[Y] = 0;
             speed[X] = 0;
             speed[Y] = 0;
+            drawn[X] = 0;
+            drawn[Y] = 0;
 
             hRefresh.pos[X] = 0;
             hRefresh.pos[Y] = 0;
             hRefresh.size[X] = REFRESH_STEP_PX;
-            hRefresh.size[Y] = planHeight;
+            hRefresh.size[Y] = 8 * planHeight;
 
             XGM_startPlay(always_mus);
 
@@ -111,13 +113,13 @@ void gameplayLoop(){
             SYS_enableInts();
         break;
         case GAME:
-            scroll[X] += speed[X];
-            scroll[Y] += speed[Y];
-            VDP_setHorizontalScroll(PLAN_A, scroll[X]);
-            VDP_setHorizontalScroll(PLAN_B, scroll[X] / 2);
-            VDP_setVerticalScroll(PLAN_A,scroll[Y]);
+            cam_pos[X] += speed[X];
+            cam_pos[Y] += speed[Y];
+            VDP_setHorizontalScroll(PLAN_A, -cam_pos[X]);
+            VDP_setHorizontalScroll(PLAN_B, -cam_pos[X] / 2);
+            VDP_setVerticalScroll(PLAN_A,cam_pos[Y]);
 
-            if( scroll[X] - drawn[X] > REFRESH_STEP_PX ){
+            if( ( cam_pos[X] - drawn[X] ) > REFRESH_STEP_PX ){
                 refreshScene();
             }
 
