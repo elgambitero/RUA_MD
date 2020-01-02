@@ -123,6 +123,10 @@ void gameplayLoop(){
                 refreshScene();
             }
 
+            if( ( cam_pos[X] - drawn[X] ) > screenWidth ){
+                pollSection();
+            }
+
         break;
         case GAMEENDING:
 
