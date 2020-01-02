@@ -9,7 +9,7 @@
 s32 cam_pos[2]; //px
 s32 drawn[2]; //px
 
-const u8 margin[2] = { 40, 4 }; //px
+const u8 margin[2] = { 80, 4 }; //px
 Rect hRefresh;
 
 u32 color = 0;
@@ -25,13 +25,13 @@ u8 updateCount;
 void pollSection(){
     if(currentSection == &section_1) currentSection = &section_2;
     else currentSection = &section_1;
-    secPos[X] = ( screenWidth + cam_pos[X] );
+    secPos[X] = ( screenWidth + cam_pos[X]);
     secPos[Y] = ( ( screenHeight / 2 ) + cam_pos[Y] );
     const Section * secPtr = currentSection;
     u8 i = 1;
     while( secPtr ){
         blockIndex[i] = blockIndex[i-1];
-        VDP_loadTileSet(secPtr->image->tileset, blockIndex[i], CPU);
+        VDP_loadTileSet(secPtr->image->tileset, blockIndex[i], DMA);
         VDP_setPaletteColors(16, secPtr->image->palette->data, secPtr->image->palette->length);
 
         blockIndex[i] += secPtr->image->tileset->numTile;
@@ -44,12 +44,16 @@ void pollSection(){
 void refreshScene(){
     const Section * secPtr = currentSection;
 
-    hRefresh.left = cam_pos[X] + screenWidth + margin[X];
+    hRefresh.left = cam_pos[X] + margin[X]; //+ screenWidth 
     hRefresh.top = cam_pos[Y] - margin[Y];
     hRefresh.right = hRefresh.left + REFRESH_STEP_PX;
     hRefresh.bottom = hRefresh.top + ( 8 * planHeight );
 
-    u8 refreshed = 0;
+    
+
+    VDP_clearTileMapRect(PLAN_A,  ( hRefresh.left / 8 ) % planWidth, ( hRefresh.top / 8 ) % planHeight, 
+        ( hRefresh.right - hRefresh.left ) / 8, ( hRefresh.bottom - hRefresh.top ) / 8);
+
     u8 i = 0;
     while ( secPtr ){
         
@@ -75,14 +79,11 @@ void refreshScene(){
             mapCrop.x, mapCrop.y,
             mapCrop.w, mapCrop.h );
 
-        refreshed++;
         i++;
         secPtr = secPtr->next;
     }
-    if(refreshed){
-        drawn[X] = cam_pos[X];
-        drawn[Y] = cam_pos[Y];
-    }
+    drawn[X] = cam_pos[X];
+    drawn[Y] = cam_pos[Y];
 }
 
 void gameplayLoop(){
@@ -116,17 +117,17 @@ void gameplayLoop(){
             cam_pos[X] += speed[X];
             cam_pos[Y] += speed[Y];
             VDP_setHorizontalScroll(PLAN_A, -cam_pos[X]);
-            VDP_setHorizontalScroll(PLAN_B, -cam_pos[X] / 2);
+            VDP_setHorizontalScroll(PLAN_B, -cam_pos[X] );
             VDP_setVerticalScroll(PLAN_A,cam_pos[Y]);
 
-            if( ( cam_pos[X] - drawn[X] ) > REFRESH_STEP_PX ){
+            if( ( cam_pos[X] - drawn[X] ) >= REFRESH_STEP_PX ){
                 refreshScene();
             }
-
+/*
             if( ( cam_pos[X] - drawn[X] ) > screenWidth ){
                 pollSection();
             }
-
+*/
         break;
         case GAMEENDING:
 
