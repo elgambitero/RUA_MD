@@ -7,8 +7,7 @@
 #define Y 1
 
 typedef struct Rect{
-    s32 pos[2];
-    u16 size[2];
+    s32 left, right, top, bottom;
 } Rect;
 
 Rect intersect(Rect a, Rect b);

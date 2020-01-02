@@ -44,40 +44,45 @@ void pollSection(){
 void refreshScene(){
     const Section * secPtr = currentSection;
 
-    hRefresh.pos[X] = cam_pos[X] + screenWidth + margin[X];
-    hRefresh.pos[Y] = cam_pos[Y] - margin[Y];
+    hRefresh.left = cam_pos[X] + screenWidth + margin[X];
+    hRefresh.top = cam_pos[Y] - margin[Y];
+    hRefresh.right = hRefresh.left + REFRESH_STEP_PX;
+    hRefresh.bottom = hRefresh.top + ( 8 * planHeight );
+
+    u8 refreshed = 0;
     u8 i = 0;
     while ( secPtr ){
         
         Rect block;
-        block.pos[X] = secPos[X] + secPtr->pos[X];
-        block.pos[Y] = secPos[Y] + secPtr->pos[Y];
-        block.size[X] = 8 * secPtr->image->map->w;
-        block.size[Y] = 8 * secPtr->image->map->h;
+        block.left = secPos[X] + secPtr->pos[X];
+        block.top = secPos[Y] + secPtr->pos[Y];
+        block.right = block.left + ( 8 * secPtr->image->map->w );
+        block.bottom = block.top + ( 8 * secPtr->image->map->h );
 
         Rect inter = intersect(hRefresh, block);
 
-        if( inter.size[X] < 0 || inter.size[Y] < 0 ) continue;
+        if( inter.left == 0 ) {i++; secPtr = secPtr->next; continue;}
 
-        Rect mapCrop;
-        mapCrop.pos[X] = ( inter.pos[X] - block.pos[X] ) / 8;
-        mapCrop.pos[Y] = ( inter.pos[Y] - block.pos[Y] ) / 8;
-        mapCrop.size[X] = inter.size[X] / 8;
-        mapCrop.size[Y] = inter.size[Y] / 8;
+        Box mapCrop;
+        mapCrop.x = ( inter.left - block.left ) / 8;
+        mapCrop.y = ( inter.top - block.top ) / 8;
+        mapCrop.w = ( inter.right - inter.left ) / 8;
+        mapCrop.h = ( inter.bottom - inter.top ) / 8;
 
         VDP_setMapEx(PLAN_A, secPtr->image->map, 
             TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, blockIndex[i]), 
-            (inter.pos[X] / 8) % planWidth, ( inter.pos[Y] / 8 ) % planHeight, 
-            mapCrop.pos[X], mapCrop.pos[Y],
-            mapCrop.size[X], mapCrop.size[Y] );
+            (inter.left / 8) % planWidth, ( inter.top / 8 ) % planHeight, 
+            mapCrop.x, mapCrop.y,
+            mapCrop.w, mapCrop.h );
 
+        refreshed++;
         i++;
         secPtr = secPtr->next;
     }
-
-    drawn[X] = cam_pos[X];
-    drawn[Y] = cam_pos[Y];
-
+    if(refreshed){
+        drawn[X] = cam_pos[X];
+        drawn[Y] = cam_pos[Y];
+    }
 }
 
 void gameplayLoop(){
@@ -91,11 +96,6 @@ void gameplayLoop(){
             speed[Y] = 0;
             drawn[X] = 0;
             drawn[Y] = 0;
-
-            hRefresh.pos[X] = 0;
-            hRefresh.pos[Y] = 0;
-            hRefresh.size[X] = REFRESH_STEP_PX;
-            hRefresh.size[Y] = 8 * planHeight;
 
             XGM_startPlay(always_mus);
 
