@@ -18,7 +18,7 @@ u16 secPos[2]; //px
 
 const Section * currentSection;
 
-u16 blockIndex[BLOCKS + 1] = {TILE_USERINDEX, TILE_USERINDEX, TILE_USERINDEX, TILE_USERINDEX};
+u16 blockIndex[BLOCKS + 1];
 
 u8 updateCount;
 
@@ -98,6 +98,8 @@ void gameplayLoop(){
             drawn[X] = 0;
             drawn[Y] = 0;
 
+            for(register u8 i = 0; i <= BLOCKS; i++) blockIndex[i] = TILE_USERINDEX;
+
             XGM_startPlay(always_mus);
 
             gameState = GAME;
@@ -135,6 +137,7 @@ void gameplayLoop(){
         case GAMEEXIT:
             VDP_clearPlan(PLAN_A, TRUE);
             VDP_clearPlan(PLAN_B, TRUE);
+            VDP_clearPlan(PLAN_WINDOW, TRUE);
 
             VDP_setHorizontalScroll(PLAN_A, 0);
             VDP_setHorizontalScroll(PLAN_B, 0);
