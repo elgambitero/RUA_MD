@@ -44,7 +44,7 @@ void pollSection(){
 void refreshScene(){
     const Section * secPtr = currentSection;
 
-    hRefresh.left = cam_pos[X] + margin[X]; //+ screenWidth 
+    hRefresh.left = cam_pos[X] + margin[X]; // + screenWidth;
     hRefresh.top = cam_pos[Y] - margin[Y];
     hRefresh.right = hRefresh.left + REFRESH_STEP_PX;
     hRefresh.bottom = hRefresh.top + ( 8 * planHeight );
@@ -119,17 +119,17 @@ void gameplayLoop(){
             cam_pos[X] += speed[X];
             cam_pos[Y] += speed[Y];
             VDP_setHorizontalScroll(PLAN_A, -cam_pos[X]);
-            VDP_setHorizontalScroll(PLAN_B, -cam_pos[X] );
+            VDP_setHorizontalScroll(PLAN_B, -cam_pos[X] / 2 );
             VDP_setVerticalScroll(PLAN_A,cam_pos[Y]);
 
             if( ( cam_pos[X] - drawn[X] ) >= REFRESH_STEP_PX ){
                 refreshScene();
             }
-/*
-            if( ( cam_pos[X] - drawn[X] ) > screenWidth ){
+
+            if( ( cam_pos[X] ) > secPos[X] + screenWidth + currentSection->image->map->w * 8 ){
                 pollSection();
             }
-*/
+
         break;
         case GAMEENDING:
 
