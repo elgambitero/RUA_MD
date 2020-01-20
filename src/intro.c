@@ -14,12 +14,12 @@ void introPlay(u16* palette, u16 ind){
                 VDP_setPaletteColor(15, 0x000);
                 VDP_drawText("A game ported with", 7, 5);
                 ind = TILE_USERINDEX;
-                VDP_drawImageEx(PLAN_A, &sgdk_logo, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, ind), 5, 7, FALSE, TRUE);
+                VDP_drawImageEx(PLAN_A, &custom_sgdk_logo, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, ind), 5, 7, FALSE, TRUE);
                 
                 // prepare palette for fade.
                 palette[15] = 0xFFF;
-                memcpy(palette + (1 * 16), sgdk_logo.palette->data, 16);
-                ind += sgdk_logo.tileset->numTile;
+                memcpy(palette + (1 * 16), custom_sgdk_logo.palette->data, 16);
+                ind += custom_sgdk_logo.tileset->numTile;
 
                 //Fade in PAL1 plus the text color
                 VDP_fadeIn(0, (2 * 16) - 1, palette, FADEFRAMES, TRUE);           

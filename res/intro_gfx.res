@@ -1,1 +1,1 @@
-IMAGE sgdk_logo "intro_gfx/sgdk_logo.bmp" BEST
+IMAGE custom_sgdk_logo "intro_gfx/sgdk_logo.bmp" BEST
