@@ -15,7 +15,5 @@ const Section section_1 = {{0, 0}, &tile194, 0};
 
 const Section section_2 = {{0, 0}, &tile192, 0};
 
-const Section section_3_1 = {{0, -50}, &tile194, 0};
-const Section section_3 = {{0, 0}, &tile192, &section_3_1};
 
 #endif 
