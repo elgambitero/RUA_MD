@@ -22,12 +22,16 @@ u16 blockIndex[BLOCKS + 1];
 
 u8 updateCount;
 
+u8 sectionCount;
+
 void pollSection(){
-    if(currentSection == &section_1) currentSection = &section_2;
-    else currentSection = &section_1;
+    currentSection = sections[sectionCount];
+
     secPos[X] = ( screenWidth + cam_pos[X]);
     secPos[Y] = ( ( screenHeight / 2 ) + cam_pos[Y] );
+
     const Section * secPtr = currentSection;
+    
     u8 i = 1;
     while( secPtr ){
         blockIndex[i] = blockIndex[i-1];
@@ -39,6 +43,7 @@ void pollSection(){
         i++;
         secPtr = secPtr->next;
     }
+    sectionCount = (sectionCount + 1) % (sizeof(sections)/sizeof(sections[0]));
 }
 
 void refreshScene(){
@@ -104,6 +109,7 @@ void gameplayLoop(){
 
             gameState = GAME;
             updateCount = REFRESH_RATE;
+            sectionCount = 0;
 
             VDP_drawImageEx(PLAN_B, &background, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, blockIndex[0]), 0, 0, TRUE, TRUE);
             VDP_setBackgroundColor(47);
