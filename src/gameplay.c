@@ -25,7 +25,7 @@ u8 updateCount;
 u8 sectionCount;
 
 void pollSection(){
-    currentSection = sections[sectionCount];
+    currentSection = sections[RNGpoll() % (sizeof(sections)/sizeof(Section *))];
 
     secPos[X] = ( screenWidth + cam_pos[X]);
     secPos[Y] = ( ( screenHeight / 2 ) + cam_pos[Y] );

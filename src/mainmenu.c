@@ -2,7 +2,10 @@
 
 #include "mainmenu.h"
 
+#include "math.h"
 #include "sound.h"
+
+u8 frame = 0;
 
 void mainMenu(){
     switch(menuState){
@@ -17,9 +20,11 @@ void mainMenu(){
 
         break;
         case MENUEXIT:
+            RNGseed(frame, 1);
             VDP_clearPlan(PLAN_A, TRUE);
             menuState = MENUENTRY;
             mainState = READY;
         break;
     }
+    frame++;
 }

@@ -53,5 +53,5 @@ u8 RNGpoll(){
 
 void RNGseed(u8 start, u8 interval){
   rng_index = start;
-  rng_interval = interval & 0x000;
+  rng_interval = interval & 0x0007;
 }
