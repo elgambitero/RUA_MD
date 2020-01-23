@@ -14,4 +14,8 @@ Rect intersect(Rect a, Rect b);
 
 u16 saturate(u16 num, u16 min, u16 max);
 
+u8 RNGpoll();
+
+u8 RNGseed(u8 start, u8 interval);
+
 #endif
