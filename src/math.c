@@ -48,10 +48,10 @@ u16 saturate(u16 num, u16 min, u16 max){
 
 u8 RNGpoll(){
   rng_index += rng_interval;
-  return rngtable_from_DooM[rng_index];
+  return rndtable_from_DooM[rng_index];
 }
 
-u8 RNGseed(u8 start, u8 interval){
+void RNGseed(u8 start, u8 interval){
   rng_index = start;
   rng_interval = interval & 0x000;
 }
