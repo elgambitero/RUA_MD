@@ -27,10 +27,6 @@ enum GameStates{
 
 enum GameStates gameState;
 
-void gameplayLoop();
-void pollSection();
-void refreshScene();
-
 static inline void gameControls(u16 joy, u16 changed, u16 state){
     if(joy == JOY_1){
         if(state & BUTTON_LEFT){
@@ -50,5 +46,7 @@ static inline void gameControls(u16 joy, u16 changed, u16 state){
         }
     }
 }
+
+void gameplayLoop();
 
 #endif

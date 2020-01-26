@@ -46,6 +46,7 @@ void pollSection(){
     sectionCount = (sectionCount + 1) % (sizeof(sections)/sizeof(sections[0]));
 }
 
+//TODO: RETHINK THIS!
 void refreshScene(){
     const Section * secPtr = currentSection;
 
@@ -127,7 +128,8 @@ void gameplayLoop(){
             VDP_setHorizontalScroll(PLAN_A, -cam_pos[X]);
             VDP_setHorizontalScroll(PLAN_B, -cam_pos[X] / 2 );
             VDP_setVerticalScroll(PLAN_A,cam_pos[Y]);
-
+            
+            //TODO: Start fixing logic here.
             if( ( cam_pos[X] - drawn[X] ) >= REFRESH_STEP_PX ){
                 refreshScene();
             }
