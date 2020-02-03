@@ -4,4 +4,10 @@ IMAGE tile195 "scenery/195.bmp" BEST
 IMAGE tile197 "scenery/197.bmp" BEST
 IMAGE tile198 "scenery/198.bmp" BEST
 IMAGE tile200 "scenery/200.bmp" BEST
+IMAGE tile202 "scenery/202.bmp" BEST
+IMAGE tile204 "scenery/204.bmp" BEST
+IMAGE tile206 "scenery/206.bmp" BEST
+IMAGE tile208 "scenery/208.bmp" BEST
+IMAGE tile210 "scenery/210.bmp" BEST
+IMAGE tile213 "scenery/213.bmp" BEST
 IMAGE background "scenery/125.bmp" BEST

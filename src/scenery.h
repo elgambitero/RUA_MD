@@ -23,11 +23,29 @@ const Section section_5 = {{0, 0}, &tile198, 0};
 
 const Section section_6 = {{0, 0}, &tile200, 0};
 
-const Section *sections[] = {&section_1, 
-                            &section_2, 
-                            &section_3, 
-                            &section_4, 
+const Section section_7 = {{0, 0}, &tile202, 0};
+
+const Section section_8 = {{0, 0}, &tile204, 0};
+
+const Section section_9 = {{0, 0}, &tile206, 0};
+
+const Section section_10 = {{0, 0}, &tile208, 0};
+
+const Section section_11 = {{0, 0}, &tile210, 0};
+
+const Section section_12 = {{0, 0}, &tile213, 0};
+
+const Section *sections[] = {&section_1,
+                            &section_2,
+                            &section_3,
+                            &section_4,
                             &section_5,
-                            &section_6};
+                            &section_6,
+                            &section_7,
+                            &section_8,
+                            &section_9,
+                            &section_10,
+                            &section_11,
+                            &section_12};
 
 #endif 
